@@ -37,7 +37,7 @@ if($isPat) {
         if($domain.ToLower() -like "*ghe.com") {
             $apiUrl = "https://api.$domain"
         } else {
-            $apiUrl = "http://api.github.com"
+            $apiUrl = "https://api.github.com"
         }
     }
 

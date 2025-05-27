@@ -1,6 +1,5 @@
 $token = $env:GH_RUNNER_TOKEN
 $url = $env:GH_RUNNER_URL
-$url = "https://bdo.ghe.com/myorg/myrepo"
 $apiUrl = $env:GH_RUNNER_API_URL
 $runnerName = $env:GH_RUNNER_NAME
 $runnerGroup = $env:GH_RUNNER_GROUP

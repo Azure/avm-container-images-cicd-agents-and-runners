@@ -1,5 +1,7 @@
 $token = $env:GH_RUNNER_TOKEN
 $url = $env:GH_RUNNER_URL
+$url = "https://bdo.ghe.com/myorg/myrepo"
+$apiUrl = $env:GH_RUNNER_API_URL
 $runnerName = $env:GH_RUNNER_NAME
 $runnerGroup = $env:GH_RUNNER_GROUP
 $runnerMode = $env:GH_RUNNER_MODE
@@ -31,7 +33,16 @@ if($isPat) {
         $tokenType = "repos"
     }
 
-    $tokenApiUrl = "https://api.github.com/$($tokenType)/$($githubOrgRepoSegment)/actions/runners/registration-token"
+    if($null -eq $apiUrl -or $apiUrl -eq "") {
+        $domain = $githubUrlSplit[1]
+        if($domain.ToLower() -like "*ghe.com") {
+            $apiUrl = "https://api.$domain"
+        } else {
+            $apiUrl = "http://api.github.com"
+        }
+    }
+
+    $tokenApiUrl = "${apiUrl}/$($tokenType)/$($githubOrgRepoSegment)/actions/runners/registration-token"
 
     Write-Host "Generating a new runner registration token using the supplied PAT from the url $tokenApiUrl"
 

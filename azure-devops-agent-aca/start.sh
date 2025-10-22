@@ -22,7 +22,7 @@ if [ -n "${USRMI_ID}" ]; then
   
   # Login using User Assigned Managed Identity
   echo "Logging in with managed identity"
-  az login --identity --username "${USRMI_ID}" --allow-no-subscriptions --verbose
+  az login --identity --client-id "${USRMI_ID}" --allow-no-subscriptions --verbose
   
   # Get access token for Azure DevOps
   AZP_TOKEN=$(az account get-access-token --resource "${APPLICATION_ID}" --query accessToken -o tsv)

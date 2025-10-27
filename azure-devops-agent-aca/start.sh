@@ -6,6 +6,35 @@ if [ -z "${AZP_URL}" ]; then
   exit 1
 fi
 
+# Check if we should use User Assigned Managed Identity authentication
+if [ -n "${USRMI_ID}" ]; then
+  echo "Using User Assigned Managed Identity authentication"
+  
+  # Fixed Application ID for Azure DevOps Services
+  APPLICATION_ID="499b84ac-1321-427f-aa17-267ca6975798"
+  
+  # Debug information (remove in production if needed)
+  echo "IDENTITY_HEADER: ${IDENTITY_HEADER}"
+  echo "IDENTITY_ENDPOINT: ${IDENTITY_ENDPOINT}"
+  echo "APPLICATION_ID: ${APPLICATION_ID}"
+  echo "USRMI_ID: ${USRMI_ID}"
+  echo "AZP_URL: ${AZP_URL}"
+  
+  # Login using User Assigned Managed Identity
+  echo "Logging in with managed identity"
+  az login --identity --client-id "${USRMI_ID}" --allow-no-subscriptions --verbose
+  
+  # Get access token for Azure DevOps
+  AZP_TOKEN=$(az account get-access-token --resource "${APPLICATION_ID}" --query accessToken -o tsv)
+  
+  if [ -z "${AZP_TOKEN}" ]; then
+    echo 1>&2 "error: failed to get access token using managed identity"
+    exit 1
+  fi
+  
+  echo "Successfully obtained access token using managed identity"
+fi
+
 if [ -z "${AZP_TOKEN_FILE}" ]; then
   if [ -z "${AZP_TOKEN}" ]; then
     echo 1>&2 "error: missing AZP_TOKEN environment variable"

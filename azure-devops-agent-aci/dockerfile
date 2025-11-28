@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/azure-powershell:ubuntu-22.04
+FROM mcr.microsoft.com/azure-powershell:ubuntu-24.04
 
 # To make it easier for build and release pipelines to run apt-get,
 # configure apt to not require confirmation (assume the -y argument by default)
@@ -25,5 +25,6 @@ WORKDIR /azp
 
 COPY ./start.sh .
 RUN chmod +x start.sh
+
 
 CMD ["./start.sh"]

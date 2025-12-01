@@ -7,19 +7,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        jq \
-        git \
-        iputils-ping \
-        libicu70 \
-        libcurl4 \
-        libunwind8 \
-        netcat \
-        ruby \
-        unzip \
-        dnsutils
+  && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  curl \
+  jq \
+  git \
+  iputils-ping \
+  libicu70 \
+  libcurl4 \
+  libunwind8 \
+  netcat-openbsd \
+  ruby \
+  unzip \
+  dnsutils
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
@@ -29,8 +32,8 @@ COPY ./start.sh ./
 RUN chmod +x ./start.sh
 
 # Create agent user and set up home directory
-RUN useradd -m -d /home/agent agent
-RUN chown -R agent:agent /azp /home/agent
+RUN useradd -m -d /home/agent agent \
+  && chown -R agent:agent /azp /home/agent
 
 USER agent
 # Another option is to run the agent as root.

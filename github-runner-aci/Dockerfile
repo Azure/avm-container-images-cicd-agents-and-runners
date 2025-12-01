@@ -6,19 +6,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        jq \
-        git \
-        iputils-ping \
-        libcurl4 \
-        libunwind8 \
-        netcat \
-        ruby \
-        unzip \
-        dnsutils \
-        nodejs
+  && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  curl \
+  jq \
+  git \
+  iputils-ping \
+  libcurl4 \
+  libunwind8 \
+  netcat-openbsd \
+  ruby \
+  unzip \
+  dnsutils \
+  nodejs
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 

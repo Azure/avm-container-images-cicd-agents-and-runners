@@ -6,21 +6,24 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update \
-&& apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        jq \
-        git \
-        dumb-init \
-        sudo \
-        iputils-ping \
-        libcurl4 \
-        libunwind8 \
-        netcat \
-        ruby \
-        unzip \
-        dnsutils \
-        nodejs
+  && apt-get upgrade -y \
+  && apt-get install -y --no-install-recommends \
+  ca-certificates \
+  curl \
+  jq \
+  git \
+  dumb-init \
+  sudo \
+  iputils-ping \
+  libcurl4 \
+  libunwind8 \
+  netcat-openbsd \
+  ruby \
+  unzip \
+  dnsutils \
+  nodejs
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
@@ -32,13 +35,12 @@ RUN groupadd -g 121 runner \
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
 RUN mkdir -p /opt/hostedtoolcache
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /actions-runner
 COPY install_actions.sh /actions-runner
 
 RUN chmod +x /actions-runner/install_actions.sh \
-  && /actions-runner/install_actions.sh ${GH_RUNNER_VERSION} ${TARGETPLATFORM} \
+  && /actions-runner/install_actions.sh "${GH_RUNNER_VERSION}" "${TARGETPLATFORM}" \
   && rm /actions-runner/install_actions.sh \
   && chown runner /_work /actions-runner /opt/hostedtoolcache
 

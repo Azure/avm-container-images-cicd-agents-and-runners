@@ -19,8 +19,8 @@ jobs:
           [
             "github-runner-aca",
             "github-runner-aci",
-            "azure-devops-runner-aca",
-            "azure-devops-runner-aci",
+            "azure-devops-agent-aca",
+            "azure-devops-agent-aci",
           ]
     defaults:
       run:

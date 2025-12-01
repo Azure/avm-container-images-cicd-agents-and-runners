@@ -13,6 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         image:
           [
@@ -37,3 +38,24 @@ jobs:
         with:
           context: .
           tags: ${{ matrix.image }}:latest
+
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@v0.10.3
+        with:
+          image-ref: ${{ matrix.image }}:latest
+          hide-progress: true
+          output: "${{ matrix.image}}/trivy.txt"
+
+      - name: Publish Trivy scan results
+        run: |
+          if [[ -s trivy.txt ]]; then
+            {
+              echo "## Security Output"
+              echo "<details><summary>Click to expand</summary>"
+              echo ""
+              echo '```terraform'
+              cat trivy.txt
+              echo '```'
+              echo "</details>"
+            } >> $GITHUB_STEP_SUMMARY
+          fi

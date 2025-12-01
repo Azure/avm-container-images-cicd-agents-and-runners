@@ -14,7 +14,7 @@ RUN apt-get update \
   jq \
   git \
   iputils-ping \
-  libicu70 \
+  libicu74 \
   libcurl4 \
   libunwind8 \
   netcat-openbsd \

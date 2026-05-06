@@ -27,6 +27,9 @@ if($isPat) {
     if($githubUrlSplit.Length -eq 3) {
         $githubOrgRepoSegment = $githubUrlSplit[-1]
         $tokenType = "orgs"
+    } elseif ($githubUrlSplit.Length -eq 4) {
+        $githubOrgRepoSegment = $githubUrlSplit[-1]
+        $tokenType = "enterprises"
     } else {
         $githubOrgRepoSegment = $githubUrlSplit[-2] + "/" + $githubUrlSplit[-1]
         $tokenType = "repos"
